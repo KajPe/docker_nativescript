@@ -45,8 +45,8 @@ RUN yes | sdkmanager --verbose \
 RUN npm cache clean --force \
   && npm install nativescript -g --unsafe-perm \
   && tns error-reporting disable \
-	&& tns usage-reporting disable \
-	&& apt-get install -y --no-install-recommends gradle
+  && tns usage-reporting disable \
+  && apt-get install -y --no-install-recommends gradle
 	
 # Clean up & create app folder
 RUN apt-get clean \
