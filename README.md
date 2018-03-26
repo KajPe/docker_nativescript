@@ -59,7 +59,12 @@ nsdocker bash -c "adb devices && mkdir -p /app/adbkeys && cp /root/.android/a* /
 Here we run multiple command in the docker in one go, therefor we need bash. When the command is run be prepared to hit ok on the phone screen to allow the connection. The docker output should show a **device** found. If you get a line marked as **unauthorized** then run the command above again.
 You only need to do this onces for each project or if you loose connection to the phone.
 
-**Note! The keys to your phone is stored in the project in folder adbkeys. If you are pushing code to git then you should add this folder to be ignored!**
+You can check if the adbkeys works with
+```
+nsdocker bash -c "cp /app/adbkeys/* /root/.android/ && adb devices"
+```
+
+**Note! The keys to your phone is stored in the projects folder adbkeys. If you are pushing code to git then you should add this folder to be ignored!**
 
 
 Next lets run (build & deploy) the project to the phone
