@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -d /app/adbkeys/ ]; then
+  echo "Copy device keys .."
+  cp /app/adbkeys/* /root/.android/
+  adb devices
+else
+  echo "Run detectdev first to add device keys"
+fi
