@@ -1,0 +1,5 @@
+#!/bin/bash
+
+adb devices
+mkdir -p /app/adbkeys
+cp /root/.android/a* /app/adbkeys/
