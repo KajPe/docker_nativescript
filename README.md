@@ -11,7 +11,7 @@ I dont see any problems running other Linux variants as a host machine.
 
 
 # Building the image
-Create a folder somewhere on the host and copy the dockerfile there. Issue a 
+Create a folder somewhere on the host and copy the dockerfile and tools folder there. Issue a 
 ```
 docker build -t nativescript .
 ```
@@ -37,7 +37,7 @@ cd testing
 
 Using nativescript own commands lets create a **HelloWorld** project.
 ```
-nsdocker tns create HelloWorld --template nativescript-template-tutorial
+nsdocker tns create HelloWorld --js
 ```
 We we're using the nsdocker alias, which actually created the container, ran the tns command, and removed the container. The current directory was mapped inside the container which tns used as a working point.
 
@@ -52,27 +52,30 @@ Going along with NativeScript lets define an android platform. IOS has not been 
 nsdocker tns platform add android
 ```
 
-Next thing is a bit tricky. The problem here is that we need to communicate with the phone via USB. adb creates the RSA keys for the connection but as soon the container is removed the keys are lost. Every time we would do a **tns run** the phone would ask to confirm the connection. To overcome this we will store the keys to the host.
-```
-nsdocker bash -c "adb devices && mkdir -p /app/adbkeys && cp /root/.android/a* /app/adbkeys/"
-```
-Here we run multiple command in the docker in one go, therefor we need bash. When the command is run be prepared to hit ok on the phone screen to allow the connection. The docker output should show a **device** found. If you get a line marked as **unauthorized** then run the command above again.
-You only need to do this onces for each project or if you loose connection to the phone.
+Connect your phone or tablet via USB. adb over tcp is not supported yet. Turn on USB debugging. Linux running on VMware also supported.
 
-You can check if the adbkeys works with
+The first thing we have to do is to authenticate our device. A helper script in the container will help in detecting your device and store the keys in the project folder under **adbkeys**. 
 ```
-nsdocker bash -c "cp /app/adbkeys/* /root/.android/ && adb devices"
+nsdocker detectdev
+```
+When the command is run be prepared to hit ok on the device screen to allow the connection. The docker output should show a **device** found. If you get a line marked as **unauthorized** then run the command above again.
+You only need to do this onces for each project or if you loose connection to the device.
+
+You can check if the keys works by issuing:
+```
+nsdocker listdev
 ```
 
-**Note! The keys to your phone is stored in the projects folder adbkeys. If you are pushing code to git then you should add this folder to be ignored!**
+**Note! The keys to your phone is stored in the projects folder *adbkeys*. If you are pushing code to git then you should add this folder to be ignored!**
 
 
 Next lets run (build & deploy) the project to the phone
 ```
-nsdocker bash -c "cp /app/adbkeys/* /root/.android/ && adb devices && tns run android"
+nsdocker tns run android
 ```
-Again we need multiple command as we need to copy the adbkeys to the container before running the **tns run android** command.
+At first run this will download Gradle and store all the data in the projects folder as .gradle (hidden, issue ls -la to see it). You might decide to exclude this folder from git.
 
-
-Might be some day I have time to get the adbkeys setup more easily but for now it works. The dockerfile has been tested to run HelloWorld examples and LiveSync also works. There is probably some missing Java libraries as I wanted this to be a clean setup.
-
+Also preview mode is supported.
+```
+nsdocker tns preview
+```
