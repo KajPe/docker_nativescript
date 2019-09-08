@@ -20,6 +20,13 @@ to build the image. You should now see the image **nativescript** when you list 
 docker images
 ```
 
+# Pulling the image from docker hub
+The image is accessible from docker hub. It's naming is different due to namespace, so after an pull, rename it with tag.
+```
+docker pull kajpe/docker_nativescript
+docker tag kajpe/docker_nativescript nativescript
+```
+
 
 # Make a docker alias
 Create an alias to help with long docker lines.
