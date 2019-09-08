@@ -21,7 +21,8 @@ docker images
 ```
 
 # Pulling the image from docker hub
-The image is accessible from docker hub. It's naming is different due to namespace, so after an pull, rename it with tag.
+The image is accessible from docker hub (if building the image is not an option).  
+It's naming is different due to namespace, so after an pull, rename it with tag.
 ```
 docker pull kajpe/docker_nativescript
 docker tag kajpe/docker_nativescript nativescript
